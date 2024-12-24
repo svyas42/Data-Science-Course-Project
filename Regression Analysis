@@ -1,0 +1,58 @@
+---
+title: "ST 442 Project"
+output: html_document
+date: "2024-04-09"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+```
+
+```{r}
+all_data <- read.csv("/Users/sachivyas/Desktop/ST 442/query_result.csv", header = TRUE)
+```
+
+```{r}
+all_data$ActiveCases <- as.numeric(all_data$ActiveCases)
+covid_model <- lm(TotalCases ~ Population + TotalDosesAdministered + DosesAdministeredPer100 + TotalCasesPerMillion + ActiveCases + PercentPopulationFullyVaccinated, all_data)
+summary(covid_model)
+```
+
+```{r}
+#eliminated Doses Administered Per 100 and Percent Population Fully Vaccinated
+covid_model2 <- lm(TotalCases ~ Population + TotalDosesAdministered + TotalCasesPerMillion + ActiveCases, all_data)
+summary(covid_model2)
+```
+
+```{r}
+summary(lm(TotalCases ~ Population, all_data))
+summary(lm(TotalCases ~ TotalDosesAdministered, all_data))
+summary(lm(TotalCases ~ TotalCasesPerMillion, all_data))
+summary(lm(TotalCases ~ ActiveCases, all_data))
+```
+
+```{r}
+library(car)
+par(mfrow=c(2,2))
+# Fitting linear regression models
+model1 <- lm(TotalCases ~ Population, all_data)
+model2 <- lm(TotalCases ~ TotalDosesAdministered, all_data)
+model3 <- lm(TotalCases ~ TotalCasesPerMillion, all_data)
+model4 <- lm(TotalCases ~ ActiveCases, all_data)
+
+# Q-Q plot for model 1
+qqPlot(model1, main = "Q-Q Plot for TotalCases
+       vs Population")
+
+# Q-Q plot for model 2
+qqPlot(model2, main = "Q-Q Plot for TotalCases 
+       vs TotalDosesAdministered")
+
+# Q-Q plot for model 3
+qqPlot(model3, main = "Q-Q Plot for TotalCases 
+       vs TotalCasesPerMillion")
+
+# Q-Q plot for model 4
+#qqPlot(model4, main = "Q-Q Plot for TotalCases ~ ActiveCases")
+```
